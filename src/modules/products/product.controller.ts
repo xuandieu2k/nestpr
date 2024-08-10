@@ -1,10 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, ValidationPipe } from "@nestjs/common";
 import { ProductService } from './product.service';
 import { ResponseData } from "src/global/globalClass";
 import { HttpMessage, HttpStatus } from "src/global/globalEnum";
-import { Product } from "src/models/product.model";
-import { ProductDto } from "src/dto/product.dto";
+import { Product } from "src/modules/products/entities/product.entities";
+import { ProductDto } from "src/modules/products/dtos/product.dto";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { FilterProductDto } from "./dtos/filter-product.dto";
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductController {
     constructor(private readonly productService: ProductService) {
@@ -12,9 +15,11 @@ export class ProductController {
     }
 
     @Get()
-    async getAllProducts(): Promise<ResponseData<Product[]>> {
+    @ApiResponse({ status: 200, description: 'Get list products success.' })
+    @ApiResponse({ status: 401, description: 'Get list products Failed!' })
+    async getAllProducts(@Query() filter: FilterProductDto): Promise<ResponseData<Product[]>> {
         try {
-            return new ResponseData<Product[]>(await this.productService.findAll(), HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+            return new ResponseData<Product[]>(await this.productService.findAll(filter), HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
             return new ResponseData<Product[]>(null, HttpStatus.ERROR, HttpMessage.ERROR)
         }

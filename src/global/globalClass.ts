@@ -1,3 +1,4 @@
+
 export class ResponseData<T> {
     data: T | T[]
     statusCode: number

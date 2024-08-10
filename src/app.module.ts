@@ -5,8 +5,8 @@ import { ProductModule } from './modules/products/product.modules';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Product } from './models/product.model';
-import { CategoriesEntity } from './entities/categories.entity';
+import { Product } from './modules/products/entities/product.entities';
+import { CategoriesEntity } from './modules/categories/entities/categories.entity';
 
 @Module({
   imports: [
